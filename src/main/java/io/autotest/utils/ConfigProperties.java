@@ -3,6 +3,9 @@ package io.autotest.utils;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * The type Config properties.
+ */
 public class ConfigProperties {
   private static final String DRIVER_NAME = "driver.name";
   private static final String CONFIG_FILE_NAME = "config.properties";
@@ -18,6 +21,11 @@ public class ConfigProperties {
     }
   }
 
+  /**
+   * Gets instance.
+   *
+   * @return the instance
+   */
   public static ConfigProperties getInstance() {
     if (instance == null) {
       instance = new ConfigProperties();
@@ -29,6 +37,11 @@ public class ConfigProperties {
     return props.getProperty(key);
   }
 
+  /**
+   * Gets driver name.
+   *
+   * @return the driver name
+   */
   public String getDriverName() {
     return getProperty(DRIVER_NAME);
   }

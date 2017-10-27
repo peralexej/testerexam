@@ -8,14 +8,27 @@ import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+/**
+ * The type Web driver factory.
+ */
 public class WebDriverFactory {
 
   private static final ConfigProperties CONFIG_PROPERTIES = ConfigProperties.getInstance();
 
+  /**
+   * Gets current driver.
+   *
+   * @return the current driver
+   */
   public static WebDriver getCurrentDriver() {
     return (WebDriver) getVariable("driver");
   }
 
+  /**
+   * Create driver web driver.
+   *
+   * @return the web driver
+   */
   public WebDriver createDriver() {
     WebDriver driver;
     String driverName = CONFIG_PROPERTIES.getDriverName();

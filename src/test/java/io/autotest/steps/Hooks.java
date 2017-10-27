@@ -7,10 +7,18 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+/**
+ * The type Hooks.
+ */
 public class Hooks {
   @Autowired
   private WebDriver driver = getCurrentDriver();
 
+  /**
+   * Before scenario.
+   *
+   * @param scenario the scenario
+   */
   @Before
   public void beforeScenario(Scenario scenario) {
     driver.manage().window().maximize();
