@@ -1,35 +1,40 @@
 package io.autotest.factory;
 
+import com.codeborne.selenide.WebDriverRunner;
+import io.autotest.utils.ConfigProperties;
+import static io.autotest.utils.Context.getVariable;
+import static io.autotest.utils.Context.putVariable;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.springframework.beans.factory.annotation.Value;
 
 public class WebDriverFactory {
-    @Value("${driver.name:chrome}")
-    private String driverName;
 
-    @Value("${webdriver.chrome.driver:ignore}")
-    private String chromeDriverLocation;
+  private static final ConfigProperties CONFIG_PROPERTIES = ConfigProperties.getInstance();
 
-    public WebDriver createDriver() {
-        WebDriver driver;
-        switch (driverName) {
-            case "chrome":
-                driver = initChromeDriver();
-                break;
-            default:
-                throw new IllegalStateException("Specification is not enough to choose driver");
-        }
-        return driver;
+  public static WebDriver getCurrentDriver() {
+    return (WebDriver) getVariable("driver");
+  }
+
+  public WebDriver createDriver() {
+    WebDriver driver;
+    String driverName = CONFIG_PROPERTIES.getDriverName();
+    switch (driverName) {
+      case "chrome":
+        driver = initChromeDriver();
+        break;
+      default:
+        throw new IllegalStateException("Specification is not enough to choose driver");
     }
+    return driver;
+  }
 
-    private WebDriver initChromeDriver() {
-        if ("ignore".equals(chromeDriverLocation)) {
-            throw new IllegalArgumentException("No webdriver.chrome.driver specified to use driver.name=chrome");
-        }
-        System.setProperty("webdriver.chrome.driver", chromeDriverLocation);
-        WebDriver driver = new ChromeDriver();
-        return driver;
-    }
-
+  private WebDriver initChromeDriver() {
+    ChromeDriverManager.getInstance().setup();
+    System.setProperty("webdriver.chrome.driver", ChromeDriverManager.getInstance().getBinaryPath());
+    ChromeDriver chromeDriver = new ChromeDriver();
+    WebDriverRunner.setWebDriver(chromeDriver);
+    putVariable("driver", WebDriverRunner.getWebDriver());
+    return WebDriverRunner.getWebDriver();
+  }
 }

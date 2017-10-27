@@ -1,20 +1,44 @@
 package io.autotest.steps;
 
+import static com.codeborne.selenide.Selenide.page;
 import cucumber.api.java.en.Given;
-import org.openqa.selenium.WebDriver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.test.context.ContextConfiguration;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import static io.autotest.factory.WebDriverFactory.getCurrentDriver;
+import io.autotest.pages.GoogleCalcPageContainer;
+import static org.junit.Assert.assertTrue;
 
-@Scope("test")
-@ContextConfiguration("classpath:spring-context/test-context.xml")
+import java.util.logging.Logger;
+
+
 public class GivenSteps {
-	@Autowired
-	private WebDriver webDriver;
+  private Logger LOGGER = Logger.getAnonymousLogger();
+  private GoogleCalcPageContainer container;
+  private String result;
+
+  public GivenSteps() {
+    container = page(GoogleCalcPageContainer.class);
+  }
+
+  @Given("^Open \"([^\"]*)\" page$")
+  public void openPage(final String url) throws Throwable {
+    LOGGER.info("Open - " + url + " page");
+    getCurrentDriver().get(url);
+  }
 
 
-    @Given("^I am on google calculator page$")
-    public void iAmOnGoogleCalculatorPage() throws Throwable {
-		webDriver.get("https://www.google.ie/search?q=calculator");
-    }
+  @When("^Number (\\d+) plus (\\d+)$")
+  public void numberPlus(int value1, int value2) throws Throwable {
+    container.btn1.click();
+    container.plus.click();
+    container.btn2.click();
+    container.equal.click();
+    result = container.result.getText();
+  }
+
+
+  @Then("^Result equal to \"([^\"]*)\"$")
+  public void resultEqualTo(String expectedValue) throws Throwable {
+    assertTrue(result.equalsIgnoreCase(expectedValue));
+  }
 }

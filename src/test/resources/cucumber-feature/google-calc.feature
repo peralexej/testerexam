@@ -1,12 +1,10 @@
 Feature: Google Calculator
-  Calculator should calculate correct calculations
+#  Calculator should calculate correct calculations
 
-  Scenario Outline: Add numbers
-    Given I am on google calculator page
-    When I add number "<number1>" to number "<number2>"
-    Then I should get an answer of "<answer>"
+  Scenario: Add numbers
+    Given Open "https://www.google.ie/search?q=calculator" page
+    When Number 1 plus 2
+    Then Result equal to "3"
 
-    Examples:
-      | number1 | number2 | answer |
-      | 1       | 2       | 3      |
-      | 4       | 5       | 9      |
+  Scenario: Check that chrome doesnt close after the scenario
+    Given Open "https://www.google.ie/search?q=calculator" page
